@@ -61,3 +61,31 @@ document.querySelectorAll('.glass-card').forEach((card) => {
   el.style.transition = 'all 0.8s cubic-bezier(0.2, 1, 0.2, 1)';
   observer.observe(el);
 });
+
+const matrixEffect = () => {
+    const canvas = document.getElementById('matrix-canvas') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d')!;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const characters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ$+-*/=%\"'#&_(),.;:?!\\|{}<>[]^~";
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops: number[] = new Array(Math.floor(columns)).fill(1);
+
+    const draw = () => {
+        ctx.fillStyle = "rgba(5, 5, 5, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#00ff9d";
+        ctx.font = fontSize + "px monospace";
+
+        for (let i = 0; i < drops.length; i++) {
+            const text = characters.charAt(Math.floor(Math.random() * characters.length));
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        }
+    };
+    setInterval(draw, 33);
+};
+matrixEffect();
