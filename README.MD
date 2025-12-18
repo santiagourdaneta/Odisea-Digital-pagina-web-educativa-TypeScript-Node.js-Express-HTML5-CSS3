@@ -1,7 +1,6 @@
 # 🚀 Odisea Digital: Fullstack Ultra-Light
 
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/tu-usuario/proyecto-super-veloz/tree/main.svg?style=shield)](https://circleci.com/project/gh/tu-usuario/proyecto-super-veloz)
-![Vite](https://img.shields.io/badge/frontend-Vite-646CFF?logo=vite)
+![Deployment Status](https://github.com/santiagourdaneta/Odisea-Digital-pagina-web-educativa-TypeScript-Node.js-Express-HTML5-CSS3/actions/workflows/deploy.yml/badge.svg)
 ![TypeScript](https://img.shields.io/badge/language-TypeScript-3178C6?logo=typescript)
 ![Express](https://img.shields.io/badge/backend-Express-000000?logo=express)
 
