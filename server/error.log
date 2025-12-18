@@ -1,0 +1,24 @@
+[2025-12-18T17:32:40.883Z] [INFO]: Pulso recibido correctamente
+[2025-12-18T17:32:41.047Z] [ERROR]: Fallo en el pulso: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-12-18T17:32:41.076Z] [INFO]: Pulso recibido correctamente
+[2025-12-18T17:32:41.087Z] [ERROR]: Fallo en el pulso: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-12-18T17:32:43.101Z] [INFO]: Pulso recibido correctamente
+[2025-12-18T17:32:43.428Z] [ERROR]: Fallo en el pulso: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-12-18T17:32:47.879Z] [INFO]: Pulso recibido correctamente
+[2025-12-18T17:32:47.883Z] [ERROR]: Fallo en el pulso: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-12-18T17:32:52.454Z] [INFO]: Pulso recibido correctamente
+[2025-12-18T17:32:52.479Z] [ERROR]: Fallo en el pulso: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-12-18T17:32:57.527Z] [INFO]: Pulso recibido correctamente
+[2025-12-18T17:32:57.530Z] [ERROR]: Fallo en el pulso: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-12-18T17:33:02.454Z] [INFO]: Pulso recibido correctamente
+[2025-12-18T17:33:02.476Z] [ERROR]: Fallo en el pulso: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-12-18T17:33:07.455Z] [INFO]: Pulso recibido correctamente
+[2025-12-18T17:33:07.484Z] [ERROR]: Fallo en el pulso: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-12-18T17:33:12.445Z] [INFO]: Pulso recibido correctamente
+[2025-12-18T17:33:12.450Z] [ERROR]: Fallo en el pulso: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+[2025-12-18T17:39:42.083Z] [INFO]: Servidor reiniciado y listo para transmisiones.
+[2025-12-18T17:46:34.928Z] [INFO]: Nuevo explorador detectado desde: ::1
+[2025-12-18T19:11:41.190Z] [INFO]: Nuevo explorador detectado desde: ::ffff:127.0.0.1
+[2025-12-18T19:11:42.127Z] [INFO]: Explorador desconectado: ::1
+[2025-12-18T19:11:44.036Z] [INFO]: Nuevo explorador detectado desde: ::1
+[2025-12-18T19:12:00.801Z] [INFO]: Explorador desconectado: ::ffff:127.0.0.1

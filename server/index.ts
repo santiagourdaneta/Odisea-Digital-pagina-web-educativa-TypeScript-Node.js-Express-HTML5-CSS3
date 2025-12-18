@@ -1,61 +1,121 @@
-import express from 'express';
+/**
+ * ODISEA DIGITAL - NÚCLEO DEL SERVIDOR (v1.0.0)
+ * Stack: Node.js + Express + TypeScript
+ * Propósito: Gestión de presencia en tiempo real y logging de auditoría.
+ */
+
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+// --- CONFIGURACIÓN DE RUTAS MODERNAS (ESM) ---
+// En módulos ES, __dirname no existe por defecto. Aquí la recreamos.
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const LOG_FILE_PATH = path.join(__dirname, 'error.log');
 
 const app = express();
+const PORT = 3000;
+
+// Middleware
 app.use(cors());
+app.use(express.json());
 
-const viajerosActivos = new Map<string, number>();
+// Base de datos volátil para seguimiento de usuarios (IP -> Timestamp)
+const activos = new Map<string, number>();
 
-// Función para guardar logs
-const logger = (mensaje: string, tipo: 'ERROR' | 'INFO' = 'INFO') => {
+/**
+ * SISTEMA DE LOGGING PROFESIONAL
+ * Registra eventos en la terminal y en un archivo físico .log
+ */
+const registrarEvento = (mensaje: string, tipo: 'ERROR' | 'INFO' = 'INFO') => {
     const timestamp = new Date().toISOString();
     const logFila = `[${timestamp}] [${tipo}]: ${mensaje}\n`;
     
-    // Imprime en consola con color
+    // Output en terminal con colores ANSI
     const color = tipo === 'ERROR' ? '\x1b[31m' : '\x1b[32m';
     console.log(`${color}${logFila}\x1b[0m`);
 
-    // Guarda en el archivo error.log
-    fs.appendFileSync(path.join(__dirname, 'error.log'), logFila);
-};
- 
-// ruta para detectar viajeros
-app.get('/api/heartbeat', (req, res) => {
-
+    // Persistencia en archivo (appendFileSync crea el archivo si no existe)
     try {
-
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
-    const ipString = ip.toString();
-    const ahora = Date.now();
-
-    // Si la IP no estaba en el mapa, es un nuevo viajero
-    if (!viajerosActivos.has(ipString)) {
-        console.log(`\x1b[32m[ENTRADA]\x1b[0m Nuevo viajero detectado desde: ${ipString} 🛰️`);
+        fs.appendFileSync(LOG_FILE_PATH, logFila);
+    } catch (err) {
+        console.error("CRITICAL: No se pudo escribir en el sistema de archivos", err);
     }
+};
 
-    viajerosActivos.set(ipString, ahora);
+/**
+ * @route GET /api/heartbeat
+ * @desc Recibe pulsos de presencia del frontend y gestiona el conteo de usuarios.
+ */
+app.get('/api/heartbeat', (req: Request, res: Response) => {
+    try {
+        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
+        const ipString = Array.isArray(ip) ? ip[0] : ip;
+        const ahora = Date.now();
 
-    // Limpieza de los que se fueron
-    for (const [uIp, ultimo] of viajerosActivos.entries()) {
-        if (ahora - ultimo > 10000) {
-            viajerosActivos.delete(uIp);
-            console.log(`\x1b[31m[SALIDA]\x1b[0m Un viajero ha dejado la órbita. 🚀`);
+        // Detectar si es un usuario nuevo
+        if (!activos.has(ipString)) {
+            registrarEvento(`Nuevo explorador detectado desde: ${ipString}`, 'INFO');
         }
-    }
 
-    res.json({ conectados: viajerosActivos.size });
+        activos.set(ipString, ahora);
 
-    logger("Pulso recibido correctamente", 'INFO');
-    res.json({ conectados: 1 });
-     } catch (error) {
-        logger(`Fallo en el pulso: ${error}`, 'ERROR');
-        res.status(500).json({ error: "Error interno del núcleo" });
+        // Limpieza de sesiones inactivas (más de 10 segundos sin pulso)
+        for (const [uIp, ultimoPulso] of activos.entries()) {
+            if (ahora - ultimoPulso > 10000) {
+                activos.delete(uIp);
+                registrarEvento(`Explorador desconectado: ${uIp}`, 'INFO');
+            }
+        }
+
+        res.json({ 
+            status: "online", 
+            conectados: activos.size,
+            timestamp: ahora 
+        });
+
+    } catch (error) {
+        registrarEvento(`Fallo en el pulso: ${error}`, 'ERROR');
+        res.status(500).json({ error: "Fallo en el Núcleo" });
     }
 });
 
-app.listen(3000, () => {
-    console.log("\n\x1b[1m\x1b[35m=== NÚCLEO DE LA ODISEA ACTIVO ===\x1b[0m");
-    console.log("📡 Monitoreando transmisiones en puerto 3000...\n");
+/**
+ * @route GET /admin/logs
+ * @desc Visualización remota de registros del sistema (Ruta secreta).
+ */
+app.get('/admin/logs', (req: Request, res: Response) => {
+    try {
+        if (!fs.existsSync(LOG_FILE_PATH)) {
+            return res.status(404).send("<h1>No hay registros aún.</h1>");
+        }
+        
+        const logs = fs.readFileSync(LOG_FILE_PATH, 'utf8');
+        res.send(`
+            <html>
+                <body style="background: #050505; color: #00ff9d; font-family: monospace; padding: 20px;">
+                    <h2 style="border-bottom: 1px solid #333;">ODISEA DIGITAL - LOGS DEL SISTEMA</h2>
+                    <pre>${logs}</pre>
+                    <script>setInterval(() => location.reload(), 5000);</script>
+                </body>
+            </html>
+        `);
+    } catch (error) {
+        res.status(500).send("Error al leer logs.");
+    }
+});
+
+// Inicialización del Servidor
+app.listen(PORT, () => {
+    console.clear(); // Limpia la terminal para un inicio elegante
+    console.log("\x1b[1m\x1b[35m");
+    console.log("=========================================");
+    console.log("   🚀 NÚCLEO DE LA ODISEA ACTIVO         ");
+    console.log("   📡 PUERTO: " + PORT                   );
+    console.log("=========================================");
+    console.log("\x1b[0m");
+    registrarEvento("Servidor reiniciado y listo para transmisiones.");
 });
