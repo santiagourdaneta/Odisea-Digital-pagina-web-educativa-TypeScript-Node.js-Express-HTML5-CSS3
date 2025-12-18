@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  
+  base: '/Odisea-Digital-pagina-web-educativa-TypeScript-Node.js-Express-HTML5-CSS3/',
   // Directorio donde está el código
   root: 'src',
   build: {
