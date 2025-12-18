@@ -1,0 +1,190 @@
+/* VARIABLES DE DISEÑO FUTURISTA */
+:root {
+  --neon-verde: #00ff9d;
+  --neon-resplandor: rgba(0, 255, 157, 0.2);
+  --fondo-oscuro: #050505;
+  --tarjeta-cristal: rgba(255, 255, 255, 0.03);
+  --borde-cristal: rgba(255, 255, 255, 0.08);
+  --texto-secundario: #888;
+}
+
+/* RESET Y BASE */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--fondo-oscuro);
+  color: #ffffff;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* NAVEGACIÓN ESTILO CRISTAL */
+.nav-futurista {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 20px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(5, 5, 5, 0.8);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-bottom: 1px solid var(--borde-cristal);
+  z-index: 1000;
+}
+
+.nav-logo {
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: var(--neon-verde);
+  text-shadow: 0 0 10px var(--neon-resplandor);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-item {
+  text-decoration: none;
+  color: var(--texto-secundario);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: 0.3s ease;
+}
+
+.nav-item:hover {
+  color: var(--neon-verde);
+  text-shadow: 0 0 8px var(--neon-resplandor);
+}
+
+/* CONTENEDOR PRINCIPAL */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 150px 20px 50px;
+}
+
+/* SECCIONES Y TARJETAS */
+.capa {
+  margin-bottom: 100px;
+}
+
+.glass-card {
+  background: var(--tarjeta-cristal);
+  border: 1px solid var(--borde-cristal);
+  border-radius: 24px;
+  padding: 3rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(0, 255, 157, 0.03), transparent);
+  transform: translateX(-100%);
+  transition: 0.6s;
+}
+
+.glass-card:hover {
+  transform: translateY(-10px) scale(1.01);
+  border-color: var(--neon-verde);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 255, 157, 0.1);
+}
+
+.glass-card:hover::before {
+  transform: translateX(100%);
+}
+
+.glass-card h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--neon-verde);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.glass-card p {
+  font-size: 1.1rem;
+  color: #ccc;
+  text-align: justify;
+}
+
+/* FOOTER */
+.footer-futurista {
+  background: #000;
+  padding: 60px 20px;
+  text-align: center;
+  border-top: 1px solid var(--borde-cristal);
+}
+
+.footer-content p {
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+#status {
+  font-family: monospace;
+  color: var(--neon-verde);
+  padding: 5px 15px;
+  border: 1px solid rgba(0, 255, 157, 0.2);
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-weight: bold;
+  color: var(--texto-secundario);
+}
+
+/* MODO AHORRO DE ENERGÍA (Clase activada por JS) */
+.low-perf .glass-card {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: none !important;
+  background: #111;
+}
+
+/* ANIMACIÓN INICIAL */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.glass-card {
+  animation: fadeIn 0.8s ease backwards;
+}
+
+/* Estilos específicos para los enlaces sociales */
+
+.social-links a {
+    color: var(--neon-verde);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    transition: 0.3s;
+}
+
+.social-links a:hover {
+    letter-spacing: 4px;
+    filter: brightness(1.2);
+}
