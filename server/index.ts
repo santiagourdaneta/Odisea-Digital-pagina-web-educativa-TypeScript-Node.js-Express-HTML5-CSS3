@@ -8,6 +8,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
+import rateLimit from 'express-rate-limit';
 import { fileURLToPath } from 'url';
 
 // --- CONFIGURACIÓN DE RUTAS MODERNAS (ESM) ---
@@ -25,6 +26,15 @@ app.use(express.json());
 
 // Base de datos volátil para seguimiento de usuarios (IP -> Timestamp)
 const activos = new Map<string, number>();
+
+// Limitador de tasa para rutas sensibles (como /admin/logs)
+const logRateLimiter = rateLimit({
+    windowMs: 60 * 1000, // 1 minuto
+    max: 5,              // máximo 5 solicitudes por minuto
+    message: "Demasiadas solicitudes a los logs del sistema. Por favor, espere un minuto antes de intentar nuevamente.",
+    standardHeaders: true, // devuelve los headers RateLimit estándar
+    legacyHeaders: false,  // deshabilita los headers X-RateLimit obsoletos
+});
 
 /**
  * SISTEMA DE LOGGING PROFESIONAL
@@ -87,7 +97,7 @@ app.get('/api/heartbeat', (req: Request, res: Response) => {
  * @route GET /admin/logs
  * @desc Visualización remota de registros del sistema (Ruta secreta).
  */
-app.get('/admin/logs', (req: Request, res: Response) => {
+app.get('/admin/logs', logRateLimiter, (req: Request, res: Response) => {
     try {
         if (!fs.existsSync(LOG_FILE_PATH)) {
             return res.status(404).send("<h1>No hay registros aún.</h1>");
